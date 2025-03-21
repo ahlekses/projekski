@@ -42,6 +42,10 @@
 import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 import Billing from "layouts/setting";
+import itdashboard from "layouts/itdashboard";
+import accounts from "layouts/accounts";
+import evaluation from "layouts/evaluation";
+import departments from "layouts/departments";
 import RTL from "layouts/rtl";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
@@ -68,11 +72,47 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Dashboard",
+    key: "dashboard_",
+    route: "/dashboard_",
+    icon: <IoHome size="15px" color="inherit" />,
+    component: itdashboard,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
     name: "Training",
-    key: "tables",
-    route: "/tables",
+    key: "Trainings",
+    route: "/Trainings",
     icon: <IoStatsChart size="15px" color="inherit" />,
     component: Tables,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Evaluation",
+    key: "Evaluation",
+    route: "/evaluation",
+    icon: <IoStatsChart size="15px" color="inherit" />,
+    component: evaluation,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Departments",
+    key: "departments",
+    route: "/departments",
+    icon: <IoStatsChart size="15px" color="inherit" />,
+    component: departments,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "User Accounts",
+    key: "useraccounts",
+    route: "/useraccounts",
+    icon: <IoStatsChart size="15px" color="inherit" />,
+    component: accounts,
     noCollapse: true,
   },
   {
