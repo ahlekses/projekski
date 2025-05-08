@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+
 export default function FormBuilder() {
   const [formName, setFormName] = useState("");
   const [formDescription, setFormDescription] = useState("");
@@ -272,7 +273,7 @@ export default function FormBuilder() {
             <button
               type="button"
               onClick={handleAddSection}
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md"
+              
             >
               Add Section
             </button>
