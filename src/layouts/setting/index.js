@@ -1,31 +1,52 @@
-// @mui material components
+import { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
+import axios from "axios";  // Import axios for API calls
 
-// Vision UI Dashboard React components
 import VuiBox from "components/VuiBox";
 import VuiTypography from "components/VuiTypography";
 import VuiButton from "components/VuiButton";
 
-// Vision UI Dashboard React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
-// Account settings page components
 import ProfileInfo from "./components/ProfileInfo";
 import SecuritySettings from "./components/SecuritySettings";
-import AccountPreferences from "./components/AccountPreferences";
-import NotificationSettings from "./components/NotificationSettings";
-import ConnectedAccounts from "./components/ConnectedAccounts";
-
-// Form components for edit mode
 import ProfileEditForm from "./components/ProfileEditForm";
-
-import { useState } from "react";
 
 function Billing() {
   const [editMode, setEditMode] = useState(false);
+  const [userData, setUserData] = useState({
+    full_name: "Guest",
+    username: "Guest",
+    email: "",
+  });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("token");  // Get the JWT token
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+
+      try {
+        const response = await axios.get("http://localhost:8000/api/user/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        console.log("Fetched user data:", response.data);
+        setUserData(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const toggleEditMode = () => {
     setEditMode(!editMode);
@@ -53,9 +74,9 @@ function Billing() {
                 </VuiBox>
                 <VuiBox p={3}>
                   {editMode ? (
-                    <ProfileEditForm toggleEditMode={toggleEditMode} />
+                    <ProfileEditForm userData={userData} toggleEditMode={toggleEditMode} />
                   ) : (
-                    <ProfileInfo />
+                    <ProfileInfo userData={userData} />
                   )}
                 </VuiBox>
               </Card>
@@ -65,7 +86,6 @@ function Billing() {
             </Grid>
           </Grid>
         </VuiBox>
-
       </VuiBox>
       <Footer />
     </DashboardLayout>

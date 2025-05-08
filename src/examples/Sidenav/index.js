@@ -16,7 +16,7 @@
 
 */
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // react-router-dom components
 import { useLocation, NavLink } from "react-router-dom";
@@ -29,6 +29,8 @@ import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import Link from "@mui/material/Link";
 import Icon from "@mui/material/Icon";
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 // Vision UI Dashboard React components
 import VuiBox from "components/VuiBox";
@@ -56,26 +58,33 @@ function Sidenav({ color, brandName, routes, ...rest }) {
   const location = useLocation();
   const { pathname } = location;
   const collapseName = pathname.split("/").slice(1)[0];
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+  const [isOpen, setIsOpen] = useState(!isMobile);
 
-  const closeSidenav = () => setMiniSidenav(dispatch, true);
+  const closeSidenav = () => {
+    if (isMobile) {
+      setIsOpen(false);
+    }
+    setMiniSidenav(dispatch, true);
+  };
 
   useEffect(() => {
-    // A function that sets the mini state of the sidenav.
     function handleMiniSidenav() {
-      setMiniSidenav(dispatch, window.innerWidth < 1200);
+      if (isMobile) {
+        setMiniSidenav(dispatch, true);
+        setIsOpen(false);
+      } else {
+        setMiniSidenav(dispatch, window.innerWidth < 1200);
+      }
     }
 
-    /** 
-     The event listener that's calling the handleMiniSidenav function when resizing the window.
-    */
     window.addEventListener("resize", handleMiniSidenav);
-
-    // Call the handleMiniSidenav function to set the state with the initial value.
     handleMiniSidenav();
 
-    // Remove event listener on cleanup
     return () => window.removeEventListener("resize", handleMiniSidenav);
-  }, [dispatch, location]);
+  }, [dispatch, isMobile]);
 
   useEffect(() => {
     if (window.innerWidth < 1440) {
@@ -105,7 +114,7 @@ function Sidenav({ color, brandName, routes, ...rest }) {
           />
         </Link>
       ) : (
-        <NavLink to={route} key={key}>
+        <NavLink to={route} key={key} onClick={closeSidenav}>
           <SidenavCollapse
             color={color}
             key={key}
@@ -141,7 +150,13 @@ function Sidenav({ color, brandName, routes, ...rest }) {
   });
 
   return (
-    <SidenavRoot {...rest} variant="permanent" ownerState={{ transparentSidenav, miniSidenav }}>
+    <SidenavRoot 
+      {...rest} 
+      variant={isMobile ? "temporary" : "permanent"} 
+      open={isMobile ? isOpen : true}
+      onClose={closeSidenav}
+      ownerState={{ transparentSidenav, miniSidenav }}
+    >
       <VuiBox
         pt={3.5}
         pb={0.5}
@@ -166,23 +181,17 @@ function Sidenav({ color, brandName, routes, ...rest }) {
         </VuiBox>
         <VuiBox component={NavLink} to="/" display="flex" alignItems="center">
           <VuiBox
-            sx={
-              ((theme) => sidenavLogoLabel(theme, { miniSidenav }),
-              {
-                display: "flex",
-                alignItems: "center",
-                margin: "0 auto",
-              })
-            }
+            sx={((theme) => sidenavLogoLabel(theme, { miniSidenav }), {
+              display: "flex",
+              alignItems: "center",
+              margin: "0 auto",
+            })}
           >
             <VuiBox
               display="flex"
-              sx={
-                ((theme) => sidenavLogoLabel(theme, { miniSidenav, transparentSidenav }),
-                {
-                  mr: miniSidenav || (miniSidenav && transparentSidenav) ? 0 : 1,
-                })
-              }
+              sx={((theme) => sidenavLogoLabel(theme, { miniSidenav, transparentSidenav }), {
+                mr: miniSidenav || (miniSidenav && transparentSidenav) ? 0 : 1,
+              })}
             >
               <SimmmpleLogo size="24px" />
             </VuiBox>
@@ -193,14 +202,11 @@ function Sidenav({ color, brandName, routes, ...rest }) {
               fontSize={14}
               letterSpacing={2}
               fontWeight="medium"
-              sx={
-                ((theme) => sidenavLogoLabel(theme, { miniSidenav, transparentSidenav }),
-                {
-                  opacity: miniSidenav || (miniSidenav && transparentSidenav) ? 0 : 1,
-                  maxWidth: miniSidenav || (miniSidenav && transparentSidenav) ? 0 : "100%",
-                  margin: "0 auto",
-                })
-              }
+              sx={((theme) => sidenavLogoLabel(theme, { miniSidenav, transparentSidenav }), {
+                opacity: miniSidenav || (miniSidenav && transparentSidenav) ? 0 : 1,
+                maxWidth: miniSidenav || (miniSidenav && transparentSidenav) ? 0 : "100%",
+                margin: "0 auto",
+              })}
             >
               {brandName}
             </VuiTypography>
@@ -208,8 +214,29 @@ function Sidenav({ color, brandName, routes, ...rest }) {
         </VuiBox>
       </VuiBox>
       <Divider light />
-      <List>{renderRoutes}</List>
-     
+      <List sx={{ 
+        px: 2,
+        pt: 2,
+        pb: 2,
+        height: "calc(100vh - 200px)",
+        overflowY: "auto",
+        overflowX: "hidden",
+        "&::-webkit-scrollbar": {
+          width: "4px",
+        },
+        "&::-webkit-scrollbar-track": {
+          background: "transparent",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          background: "rgba(255,255,255,0.2)",
+          borderRadius: "4px",
+        },
+        "&::-webkit-scrollbar-thumb:hover": {
+          background: "rgba(255,255,255,0.3)",
+        },
+      }}>
+        {renderRoutes}
+      </List>
     </SidenavRoot>
   );
 }

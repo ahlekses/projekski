@@ -25,7 +25,7 @@ function ReferralTracking() {
 					sx={{ width: '100%' }}
 					mb='40px'>
 					<VuiTypography variant='lg' color='white' mr='auto' fontWeight='bold'>
-						Turnover Rate Overview
+						Survey Answers Ratio
 					</VuiTypography>
 					<VuiBox
 						display='flex'
@@ -83,10 +83,10 @@ function ReferralTracking() {
 								}
 							})}>
 							<VuiTypography color='text' variant='button' fontWeight='regular' mb='5px'>
-								Resignations
+								Answers
 							</VuiTypography>
 							<VuiTypography color='white' variant='lg' fontWeight='bold'>
-								11 people
+							1363
 							</VuiTypography>
 						</VuiBox>
 						<VuiBox
@@ -106,10 +106,10 @@ function ReferralTracking() {
 								}
 							})}>
 							<VuiTypography color='text' variant='button' fontWeight='regular' mb='5px'>
-								Employeed
+								Sent to
 							</VuiTypography>
 							<VuiTypography color='white' variant='lg' fontWeight='bold'>
-								1,465
+								1,465 people
 							</VuiTypography>
 						</VuiBox>
 					</Stack>
@@ -132,9 +132,7 @@ function ReferralTracking() {
 								justifyContent: 'center'
 							}}>
 							<VuiBox display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
-								<VuiTypography color='text' variant='button' mb='4px'>
-									Safety
-								</VuiTypography>
+								
 								<VuiTypography
 									color='white'
 									variant='d5'
@@ -145,10 +143,10 @@ function ReferralTracking() {
 											fontSize: '32px'
 										}
 									})}>
-									9.3
+									93%
 								</VuiTypography>
 								<VuiTypography color='text' variant='button'>
-									Total Score
+									Survey Completion
 								</VuiTypography>
 							</VuiBox>
 						</VuiBox>

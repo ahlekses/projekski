@@ -3,12 +3,12 @@ import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
-
+import PropTypes from "prop-types";
 // Vision UI Dashboard React components
 import VuiBox from "components/VuiBox";
 import VuiTypography from "components/VuiTypography";
 
-function ProfileInfo() {
+function ProfileInfo({ userData }) {
   return (
     <VuiBox>
       <Grid container spacing={3}>
@@ -20,7 +20,7 @@ function ProfileInfo() {
               sx={{ width: 120, height: 120, margin: "0 auto", mb: 2 }}
             />
             <VuiTypography variant="h5" fontWeight="medium" color="white" mb={1}>
-              Alex Thompson
+               {userData.full_name}
             </VuiTypography>
             <VuiTypography variant="button" color="text" fontWeight="regular">
               Product Manager
@@ -89,5 +89,13 @@ function ProfileInfo() {
     </VuiBox>
   );
 }
+
+ProfileInfo.propTypes = {
+  userData: PropTypes.shape({
+    full_name: PropTypes.string,
+    username: PropTypes.string,
+    email: PropTypes.string,
+  }),
+};
 
 export default ProfileInfo;

@@ -40,43 +40,7 @@ function SecuritySettings() {
           </VuiButton>
         </VuiBox>
         <Divider light />
-        <VuiBox mt={3} mb={3}>
-          <VuiBox display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-            <VuiBox display="flex" alignItems="center">
-              <VerifiedUserIcon sx={{ color: "info.main", mr: 1 }} />
-              <VuiTypography variant="button" color="white" fontWeight="medium">
-                Two-factor Authentication
-              </VuiTypography>
-            </VuiBox>
-            <Switch
-              checked={twoFactor}
-              onChange={() => setTwoFactor(!twoFactor)}
-              color="info"
-            />
-          </VuiBox>
-          <VuiTypography variant="caption" color="text">
-            Enable two-factor authentication for added security when signing in.
-          </VuiTypography>
-        </VuiBox>
-        <Divider light />
-        <VuiBox mt={3}>
-          <VuiBox display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-            <VuiBox display="flex" alignItems="center">
-              <SecurityIcon sx={{ color: "info.main", mr: 1 }} />
-              <VuiTypography variant="button" color="white" fontWeight="medium">
-                Login Notifications
-              </VuiTypography>
-            </VuiBox>
-            <Switch
-              checked={loginAlert}
-              onChange={() => setLoginAlert(!loginAlert)}
-              color="info"
-            />
-          </VuiBox>
-          <VuiTypography variant="caption" color="text">
-            Receive email notifications for new logins on your account.
-          </VuiTypography>
-        </VuiBox>
+
       </VuiBox>
     </Card>
   );

@@ -17,23 +17,20 @@
 */
 
 import { useEffect } from "react";
-
-// react-router-dom components
 import { useLocation } from "react-router-dom";
-
-// prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
-
-// Vision UI Dashboard React components
 import VuiBox from "components/VuiBox";
-
-// Vision UI Dashboard React context
 import { useVisionUIController, setLayout } from "context";
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 function DashboardLayout({ children }) {
   const [controller, dispatch] = useVisionUIController();
   const { miniSidenav } = controller;
   const { pathname } = useLocation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
     setLayout(dispatch, "dashboard");
@@ -42,8 +39,16 @@ function DashboardLayout({ children }) {
   return (
     <VuiBox
       sx={({ breakpoints, transitions, functions: { pxToRem } }) => ({
-        p: 3,
+        p: {
+          xs: 2,
+          sm: 2.5,
+          md: 3,
+        },
         position: "relative",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
 
         [breakpoints.up("xl")]: {
           marginLeft: miniSidenav ? pxToRem(120) : pxToRem(274),
@@ -52,9 +57,35 @@ function DashboardLayout({ children }) {
             duration: transitions.duration.standard,
           }),
         },
+
+        [breakpoints.down("xl")]: {
+          marginLeft: 0,
+          transition: transitions.create(["margin-left", "margin-right"], {
+            easing: transitions.easing.easeInOut,
+            duration: transitions.duration.standard,
+          }),
+        },
       })}
     >
-      {children}
+      <VuiBox
+        sx={{
+          width: "100%",
+          maxWidth: {
+            xs: "100%",
+            sm: "540px",
+            md: "720px",
+            lg: "960px",
+            xl: "1140px",
+            xxl: "1320px",
+          },
+          margin: "0 auto",
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {children}
+      </VuiBox>
     </VuiBox>
   );
 }

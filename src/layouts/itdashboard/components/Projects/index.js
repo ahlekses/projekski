@@ -33,7 +33,7 @@ import VuiTypography from "components/VuiTypography";
 import Table from "examples/Tables/Table";
 
 // Data
-import data from "layouts/dashboard/components/Projects/data";
+import data from "layouts/itdashboard/components/Projects/data";
 
 function Projects() {
   const { columns, rows } = data();
@@ -72,12 +72,12 @@ function Projects() {
       <VuiBox display="flex" justifyContent="space-between" alignItems="center" mb="32px">
         <VuiBox mb="auto">
           <VuiTypography color="white" variant="lg" mb="6px" gutterBottom>
-            On-going interventions
+          Upload History
           </VuiTypography>
           <VuiBox display="flex" alignItems="center" lineHeight={0}>
             <BsCheckCircleFill color="green" size="15px" />
             <VuiTypography variant="button" fontWeight="regular" color="text" ml="5px">
-              &nbsp;<strong>30 done</strong> this month
+              &nbsp;<strong>30 total</strong> uploads
             </VuiTypography>
           </VuiBox>
         </VuiBox>

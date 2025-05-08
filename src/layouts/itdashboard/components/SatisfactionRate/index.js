@@ -1,92 +1,76 @@
 import React from 'react';
-
 import { Card } from '@mui/material';
 import VuiBox from 'components/VuiBox';
 import VuiTypography from 'components/VuiTypography';
-import { IoHappy } from 'react-icons/io5';
-import colors from 'assets/theme/base/colors';
-import linearGradient from 'assets/theme/functions/linearGradient';
-import CircularProgress from '@mui/material/CircularProgress';
+import { PieChart } from '@mui/x-charts/PieChart';
+import { desktopOS, valueFormatter } from 'layouts/itdashboard/data/pieChartData';
 
 const SatisfactionRate = () => {
-	const { info, gradients } = colors;
-	const { cardContent } = gradients;
+	const truncateLabel = (label, maxLength = 6) => {
+		return label.length > maxLength ? `${label.slice(0, maxLength)}..` : label;
+	};
 
 	return (
-		<Card sx={{ height: '340px' }}>
-			<VuiBox display='flex' flexDirection='column'>
-				<VuiTypography variant='lg' color='white' mr='auto' fontWeight='bold' >
-					Current Employee Satisfaction Rate
-				</VuiTypography>
-				<VuiTypography variant='button' color='text' fontWeight='regular' mb='20px'>
-					From all departments
-				</VuiTypography>
-				<VuiBox sx={{ alignSelf: 'center', justifySelf: 'center', zIndex: '-1' }}>
-					<VuiBox sx={{ position: 'relative', display: 'inline-flex' }}>
-						<CircularProgress variant='determinate' value={60} size={170} color='info' />
-						<VuiBox
-							sx={{
-								top: 0,
-								left: 0,
-								bottom: 0,
-								right: 0,
-								position: 'absolute',
-								display: 'flex',
-								alignItems: 'center',
-								justifyContent: 'center'
-							}}>
-							<VuiBox
-								sx={{
-									background: info.main,
-									transform: 'translateY(-50%)',
-									width: '50px',
-									height: '50px',
-									borderRadius: '50%',
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center'
-								}}>
-								<IoHappy size='30px' color='#fff' />
-							</VuiBox>
-						</VuiBox>
-					</VuiBox>
-				</VuiBox>
-				<VuiBox
-					sx={({ breakpoints }) => ({
-						width: '90%',
-						padding: '18px 22px',
-						display: 'flex',
-						justifyContent: 'space-between',
-						flexDirection: 'row',
-						height: '82px',
-						mx: 'auto',
-						borderRadius: '20px',
-						background: linearGradient(cardContent.main, cardContent.state, cardContent.deg),
-						transform: 'translateY(-90%)',
-						zIndex: '1000'
-					})}>
-					<VuiTypography color='text' variant='caption' display='inline-block' fontWeight='regular'>
-						0%
-					</VuiTypography>
-					<VuiBox
-						flexDirection='column'
-						display='flex'
-						justifyContent='center'
-						alignItems='center'
-						sx={{ minWidth: '80px' }}>
-						<VuiTypography color='white' variant='h3'>
-							95%
-						</VuiTypography>
-						<VuiTypography color='text' variant='caption' fontWeight='regular'>
-							Based on surveys
-						</VuiTypography>
-					</VuiBox>
-					<VuiTypography color='text' variant='caption' display='inline-block' fontWeight='regular'>
-						100%
-					</VuiTypography>
-				</VuiBox>
+		<Card sx={{ width: '100%', height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+		<VuiBox display='flex' flexDirection='column' height="100%" width="100%">
+			<VuiTypography variant='lg' color='white' mr='auto' fontWeight='bold'>
+				Employees per Department
+			</VuiTypography>
+	
+			{/* Wrapper to control pie chart size */}
+			<VuiBox sx={{ width: '90%', height: '90%', maxWidth: 600, maxHeight: 600, margin: 'auto' }}>
+				<PieChart 
+					width={300}  // ✅ Use pixels for actual rendering size
+					height={300} // ✅ Makes sure the pie chart is big
+					series={[
+						{
+							data: desktopOS,
+							highlightScope: { fade: 'global', highlight: 'item' },
+							faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+							valueFormatter,
+							paddingAngle: 0,
+							cornerRadius: 0,
+							
+							arcLabelMinAngle: 10,
+							arcLabelStyle: {
+								color: 'white',
+								fontSize: 'clamp(5px, 2vw, 10px)', // Ensure text is readable
+								fontWeight: 600,
+							},
+						},
+					]}
+					slotProps={{ 
+						legend: { 
+							hidden: false,
+							direction: 'row',
+							position: { vertical: 'bottom', horizontal: 'left' },
+							padding: 0,
+							
+							labelStyle: { 
+								fill: 'white',
+								fontSize: 'clamp(5px, 2vw, 9.5px)', 
+								fontWeight: 600 
+							},
+							itemMarkWidth: 20,
+							itemMarkHeight: 2,
+							markGap: 5,
+							itemGap: 20,
+							
+							
+						},
+						pieArc: { strokeWidth: 0, stroke: "none" }
+					}}
+					sx={{
+						"& .MuiPieArc-root": { stroke: "none", strokeWidth: 0 },
+						"& .MuiChartsLegend-label": { fill: "white" },
+						"& .MuiPieArcLabel-root": { fill: "white", fontSize: "clamp(5px, 2vw, 9.5px)", fontWeight: 600 },
+					}}
+				/>
 			</VuiBox>
-		</Card>
+		</VuiBox>
+	</Card>
+	
+
 	);
 };
 

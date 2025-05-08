@@ -1,55 +1,19 @@
-/*!
-
-=========================================================
-* Vision UI Free React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/vision-ui-free-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com/)
-* Licensed under MIT (https://github.com/creativetimofficial/vision-ui-free-react/blob/master LICENSE.md)
-
-* Design and Coded by Simmmple & Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-
-/** 
-  All of the routes for the Vision UI Dashboard React are added here,
-  You can add a new route, customize the routes and delete the routes here.
-
-  Once you add a new route on this file it will be visible automatically on
-  the Sidenav.
-
-  For adding a new route you can follow the existing routes in the routes array.
-  1. The `type` key with the `collapse` value is used for a route.
-  2. The `type` key with the `title` value is used for a title inside the Sidenav. 
-  3. The `type` key with the `divider` value is used for a divider between Sidenav items.
-  4. The `name` key is used for the name of the route on the Sidenav.
-  5. The `key` key is used for the key of the route (It will help you with the key prop inside a loop).
-  6. The `icon` key is used for the icon of the route on the Sidenav, you have to add a node.
-  7. The `collapse` key is used for making a collapsible item on the Sidenav that has other routes
-  inside (nested routes), you need to pass the nested routes inside an array as a value for the `collapse` key.
-  8. The `route` key is used to store the route location which is used for the react router.
-  9. The `href` key is used to store the external links location.
-  10. The `title` key is only for the item with the type of `title` and its used for the title text on the Sidenav.
-  10. The `component` key is used to store the component of its route.
-*/
-
 // Vision UI Dashboard React layouts
 import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 import Billing from "layouts/setting";
-import itdashboard from "layouts/itdashboard";
+import ITDashboard from "layouts/itdashboard";
 import accounts from "layouts/accounts";
 import evaluation from "layouts/evaluation";
+import empevaluation from "layouts/employeeeval";
 import departments from "layouts/departments";
+import emp from "layouts/emptraining";
 import RTL from "layouts/rtl";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import FormsList from "components/Forms/FormsList";
+
 
 // Vision UI Dashboard React icons
 import { IoRocketSharp } from "react-icons/io5";
@@ -59,8 +23,13 @@ import { IoBuild } from "react-icons/io5";
 import { BsCreditCardFill } from "react-icons/bs";
 import { IoStatsChart } from "react-icons/io5";
 import { IoHome } from "react-icons/io5";
+import { IoIosBrowsers } from "react-icons/io";
+import { CgOrganisation } from "react-icons/cg";
+import { IoIosContacts } from "react-icons/io";
+import { IoIosKeypad } from "react-icons/io";
 
-const routes = [
+// Define routes for each role
+const hrmoRoutes = [
   {
     type: "collapse",
     name: "Dashboard",
@@ -68,15 +37,6 @@ const routes = [
     route: "/dashboard",
     icon: <IoHome size="15px" color="inherit" />,
     component: Dashboard,
-    noCollapse: true,
-  },
-  {
-    type: "collapse",
-    name: "Dashboard",
-    key: "dashboard_",
-    route: "/dashboard_",
-    icon: <IoHome size="15px" color="inherit" />,
-    component: itdashboard,
     noCollapse: true,
   },
   {
@@ -90,10 +50,40 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Settings",
+    key: "setting",
+    route: "/setting",
+    icon: <IoBuild size="15px" color="inherit" />,
+    component: Billing,
+    noCollapse: true,
+  },
+];
+
+const itRoutes = [
+  {
+    type: "collapse",
+    name: "Dashboard",
+    key: "it-dashboard",
+    route: "/it-dashboard",
+    icon: <IoHome size="15px" color="inherit" />,
+    component: ITDashboard,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Forms",
+    key: "forms",
+    route: "/forms",
+    icon: <IoIosDocument size="15px" color="inherit" />,
+    component: FormsList,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
     name: "Evaluation",
-    key: "Evaluation",
+    key: "evaluation",
     route: "/evaluation",
-    icon: <IoStatsChart size="15px" color="inherit" />,
+    icon: <IoIosBrowsers size="15px" color="inherit" />,
     component: evaluation,
     noCollapse: true,
   },
@@ -102,7 +92,7 @@ const routes = [
     name: "Departments",
     key: "departments",
     route: "/departments",
-    icon: <IoStatsChart size="15px" color="inherit" />,
+    icon: <IoIosKeypad size="15px" color="inherit" />,
     component: departments,
     noCollapse: true,
   },
@@ -111,7 +101,7 @@ const routes = [
     name: "User Accounts",
     key: "useraccounts",
     route: "/useraccounts",
-    icon: <IoStatsChart size="15px" color="inherit" />,
+    icon: <IoIosContacts size="15px" color="inherit" />,
     component: accounts,
     noCollapse: true,
   },
@@ -124,27 +114,102 @@ const routes = [
     component: Billing,
     noCollapse: true,
   },
+];
 
+const employeeRoutes = [
+  {
+    type: "collapse",
+    name: "Training",
+    key: "Training",
+    route: "/Training",
+    icon: <IoStatsChart size="15px" color="inherit" />,
+    component: emp,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Evaluation",
+    key: "empevaluation",
+    route: "/empevaluation",
+    icon: <IoIosBrowsers size="15px" color="inherit" />,
+    component: empevaluation,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Settings",
+    key: "setting",
+    route: "/setting",
+    icon: <IoBuild size="15px" color="inherit" />,
+    component: Billing,
+    noCollapse: true,
+  },
+];
+
+// Authentication routes (visible to all)
+const authRoutes = [
   {
     type: "component",
     name: "SignIn",
     key: "sign-in",
     route: "/sign-in",
-    icon: <IoBuild size="15px" color="inherit" />,
     component: SignIn,
     noCollapse: true,
+    hidden: true, // Not shown in sidenav
   },
-
   {
     type: "component",
     name: "SignUp",
     key: "sign-up",
     route: "/sign-up",
-    icon: <IoBuild size="15px" color="inherit" />,
     component: SignUp,
     noCollapse: true,
+    hidden: true, // Not shown in sidenav
   },
-
 ];
+
+// Function to get role-based routes
+const getRoutesByRole = (role) => {
+  console.log('Getting routes for role:', role);
+  let roleRoutes;
+  switch (role) {
+    case "HRMO":
+      roleRoutes = [...hrmoRoutes, ...authRoutes];
+      break;
+    case "IT":
+      roleRoutes = [...itRoutes, ...authRoutes];
+      break;
+    case "Employee":
+      roleRoutes = [...employeeRoutes, ...authRoutes];
+      break;
+    default:
+      roleRoutes = authRoutes;
+  }
+  console.log('Routes for role:', roleRoutes);
+  return roleRoutes;
+};
+
+// Export the function to get role-based routes
+export { getRoutesByRole };
+
+// Default export for backward compatibility (can be removed later)
+const routes = [...authRoutes];
+
+import EvaluationList from './components/Evaluations/EvaluationList';
+import DepartmentList from './components/Departments/DepartmentList';
+
+routes.push(
+  {
+    path: '/evaluations',
+    component: EvaluationList,
+    name: 'Evaluations',
+  },
+  {
+    path: '/departments',
+    component: DepartmentList,
+    name: 'Departments',
+  },
+  // ... add other routes as needed
+);
 
 export default routes;

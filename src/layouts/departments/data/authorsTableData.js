@@ -24,11 +24,11 @@ import VuiAvatar from "components/VuiAvatar";
 import VuiBadge from "components/VuiBadge";
 
 // Images
-import avatar1 from "assets/images/avatar1.png";
-import avatar2 from "assets/images/avatar2.png";
-import avatar3 from "assets/images/avatar3.png";
-import avatar4 from "assets/images/avatar4.png";
-import avatar5 from "assets/images/avatar5.png";
+import avatar1 from "assets/images/dep1.png";
+import avatar2 from "assets/images/dep2.png";
+import avatar3 from "assets/images/dep3.png";
+import avatar4 from "assets/images/dep4.png";
+import avatar5 from "assets/images/dep5.png";
 import avatar6 from "assets/images/avatar6.png";
 
 function Author({ image, name, email }) {
@@ -73,8 +73,8 @@ export default {
 
   rows: [
     {
-      name: <Author image={avatar4} name="Esthera Jackson" email="esthera@simmmple.com" />,
-      location: <Function job="Manager" org="Organization" />,
+      name: <Author image={avatar4} name="Executive" email="executivedept@simmmple.com" />,
+      location: <Function job="Marinduque" org="Building 1" />,
       status: (
         <VuiBadge
           variant="standard"
@@ -102,8 +102,8 @@ export default {
       ),
     },
     {
-      name: <Author image={avatar2} name="Alexa Liras" email="alexa@simmmple.com" />,
-      location: <Function job="Programator" org="Developer" />,
+      name: <Author image={avatar2} name="Infrastructure" email="infradept@simmmple.com" />,
+      location: <Function job="Marinduque" org="Building 1" />,
       status: (
         <VuiBadge
           variant="standard"
@@ -130,8 +130,8 @@ export default {
       ),
     },
     {
-      name: <Author image={avatar3} name="Laurent Michael" email="laurent@simmmple.com" />,
-      location: <Function job="Executive" org="Projects" />,
+      name: <Author image={avatar3} name="Operations" email="operationsdept@simmmple.com" />,
+      location: <Function job="Marinduque" org="Building 1" />,
       status: (
         <VuiBadge
           variant="standard"
@@ -159,8 +159,8 @@ export default {
       ),
     },
     {
-      name: <Author image={avatar1} name="Freduardo Hill" email="freduardo@simmmple.com" />,
-      location: <Function job="Programator" org="Developer" />,
+      name: <Author image={avatar1} name="Marketing" email="marketingdept@simmmple.com" />,
+      location: <Function job="Marinduque" org="Building 1" />,
       status: (
         <VuiBadge
           variant="standard"
@@ -188,8 +188,8 @@ export default {
       ),
     },
     {
-      name: <Author image={avatar5} name="Daniel Thomas" email="daniel@simmmple.com" />,
-      location: <Function job="Manager" org="Executive" />,
+      name: <Author image={avatar5} name="Finance" email="financedept@simmmple.com" />,
+      location: <Function job="Marinduque" org="Building 1" />,
       status: (
         <VuiBadge
           variant="standard"
@@ -215,33 +215,6 @@ export default {
         </VuiTypography>
       ),
     },
-    {
-      name: <Author image={avatar6} name="Mark Wilson" email="mark@simmmple.com" />,
-      location: <Function job="Programtor" org="Developer" />,
-      status: (
-        <VuiBadge
-          variant="standard"
-          badgeContent="Inactive"
-          size="xs"
-          container
-          sx={({ palette: { white }, borders: { borderRadius, borderWidth } }) => ({
-            background: "unset",
-            border: `${borderWidth[1]} solid ${white.main}`,
-            borderRadius: borderRadius.md,
-            color: white.main,
-          })}
-        />
-      ),
-      datecreated: (
-        <VuiTypography variant="caption" color="white" fontWeight="medium">
-          14/09/20
-        </VuiTypography>
-      ),
-      action: (
-        <VuiTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-          Edit
-        </VuiTypography>
-      ),
-    },
+   
   ],
 };

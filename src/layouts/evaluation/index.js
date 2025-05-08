@@ -18,6 +18,7 @@
 import { useState } from "react";
 // @mui material components
 import Card from "@mui/material/Card";
+import FileUpload from "@mui/icons-material/FileUpload";
 
 import Icon from "@mui/material/Icon";
 import Menu from "@mui/material/Menu";
@@ -26,6 +27,7 @@ import { BsCheckCircleFill } from "react-icons/bs";
 // Vision UI Dashboard React components
 import VuiBox from "components/VuiBox";
 import VuiTypography from "components/VuiTypography";
+import VuiButton from "components/VuiButton";
 
 // Vision UI Dashboard React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -72,6 +74,9 @@ function evaluation() {
     <DashboardLayout>
       <DashboardNavbar />
       <VuiBox py={3}>
+      <VuiBox mb={3}>
+        <VuiButton  variant="contained" color="info"><FileUpload/>&nbsp; Upload csv data for analytics</VuiButton>
+        </VuiBox>
         <VuiBox mb={3}>
           <Card>
             <VuiBox display="flex" justifyContent="space-between" alignItems="center" mb="22px">

@@ -61,7 +61,7 @@ function Function({ job, org }) {
 export default {
   columns: [
     { name: "title", align: "left" },
-    { name: "type", align: "left" },
+
     { name: "status", align: "center" },
     { name: "datecreated", align: "center" },
     { name: "action", align: "center" },
@@ -69,7 +69,7 @@ export default {
 
   rows: [
     {
-      title: <Author name="Esthera Jackson" email="esthera@simmmple.com" />,
+      title: <Author name="First-Day Onboarding Satisfaction Questionnaire" email="esthera@simmmple.com" />,
       type: <Function job="Manager" org="Organization" />,
       status: (
         <VuiBadge
@@ -100,7 +100,7 @@ export default {
       ),
     },
     {
-      title: <Author image={avatar2} name="Alexa Liras" email="alexa@simmmple.com" />,
+      title: <Author image={avatar2} name="Mid-Contract Job Satisfaction Questionnaire" email="alexa@simmmple.com" />,
       type: <Function job="Programator" org="Developer" />,
       status: (
         <VuiBadge
@@ -128,7 +128,7 @@ export default {
       ),
     },
     {
-      title: <Author image={avatar3} name="Laurent Michael" email="laurent@simmmple.com" />,
+      title: <Author image={avatar3} name="End-of-Contract Evaluation & Renewal Consideration Questionnaire" email="laurent@simmmple.com" />,
       type: <Function job="Executive" org="Projects" />,
       status: (
         <VuiBadge
@@ -155,91 +155,6 @@ export default {
           Edit
         </VuiTypography>
       ),
-    },
-    {
-      title: <Author image={avatar1} name="Freduardo Hill" email="freduardo@simmmple.com" />,
-      type: <Function job="Programator" org="Developer" />,
-      status: (
-        <VuiBadge
-          variant="standard"
-          badgeContent="Active"
-          color="success"
-          size="xs"
-          container
-          sx={({ palette: { white, success }, borders: { borderRadius, borderWidth } }) => ({
-            background: success.main,
-            border: `${borderWidth[1]} solid ${success.main}`,
-            borderRadius: borderRadius.md,
-            color: white.main,
-          })}
-        />
-      ),
-      datecreated: (
-        <VuiTypography variant="caption" color="white" fontWeight="medium">
-          24/12/08
-        </VuiTypography>
-      ),
-      action: (
-        <VuiTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-          Edit
-        </VuiTypography>
-      ),
-    },
-    {
-      title: <Author image={avatar5} name="Daniel Thomas" email="daniel@simmmple.com" />,
-      type: <Function job="Manager" org="Executive" />,
-      status: (
-        <VuiBadge
-          variant="standard"
-          badgeContent="Inactive"
-          size="xs"
-          container
-          sx={({ palette: { white }, borders: { borderRadius, borderWidth } }) => ({
-            background: "unset",
-            border: `${borderWidth[1]} solid ${white.main}`,
-            borderRadius: borderRadius.md,
-            color: white.main,
-          })}
-        />
-      ),
-      datecreated: (
-        <VuiTypography variant="caption" color="white" fontWeight="medium">
-          04/10/21
-        </VuiTypography>
-      ),
-      action: (
-        <VuiTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-          Edit
-        </VuiTypography>
-      ),
-    },
-    {
-      title: <Author image={avatar6} name="Mark Wilson" email="mark@simmmple.com" />,
-      type: <Function job="Programtor" org="Developer" />,
-      status: (
-        <VuiBadge
-          variant="standard"
-          badgeContent="Inactive"
-          size="xs"
-          container
-          sx={({ palette: { white }, borders: { borderRadius, borderWidth } }) => ({
-            background: "unset",
-            border: `${borderWidth[1]} solid ${white.main}`,
-            borderRadius: borderRadius.md,
-            color: white.main,
-          })}
-        />
-      ),
-      datecreated: (
-        <VuiTypography variant="caption" color="white" fontWeight="medium">
-          14/09/20
-        </VuiTypography>
-      ),
-      action: (
-        <VuiTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-          Edit
-        </VuiTypography>
-      ),
-    },
+    }
   ],
 };

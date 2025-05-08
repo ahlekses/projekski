@@ -49,6 +49,18 @@ export default styled(Drawer)(({ theme, ownerState }) => {
         duration: transitions.duration.enteringScreen,
       }),
     },
+
+    [breakpoints.down("xl")]: {
+      boxShadow: transparentSidenav ? "none" : xxl,
+      marginBottom: transparentSidenav ? 0 : "inherit",
+      left: "0",
+      width: sidebarWidth,
+      transform: "translateX(0)",
+      transition: transitions.create(["width", "background-color"], {
+        easing: transitions.easing.sharp,
+        duration: transitions.duration.enteringScreen,
+      }),
+    },
   });
 
   // styles for the sidenav when miniSidenav={true}
@@ -71,6 +83,19 @@ export default styled(Drawer)(({ theme, ownerState }) => {
         duration: transitions.duration.shorter,
       }),
     },
+
+    [breakpoints.down("xl")]: {
+      boxShadow: transparentSidenav ? "none" : xxl,
+      marginBottom: transparentSidenav ? 0 : "inherit",
+      left: "0",
+      width: pxToRem(96),
+      overflowX: "hidden",
+      transform: "translateX(0)",
+      transition: transitions.create(["width", "background-color"], {
+        easing: transitions.easing.sharp,
+        duration: transitions.duration.shorter,
+      }),
+    },
   });
 
   return {
@@ -78,14 +103,28 @@ export default styled(Drawer)(({ theme, ownerState }) => {
       boxShadow: xxl,
       border: "none",
       background: transparentSidenav
-      ? transparent.main
-      : linearGradient(
+        ? transparent.main
+        : linearGradient(
             gradients.sidenav.main,
             gradients.sidenav.state,
             gradients.sidenav.deg
           ),
-    backdropFilter: transparentSidenav ? "unset" : "blur(120px)",
+      backdropFilter: transparentSidenav ? "unset" : "blur(120px)",
       ...(miniSidenav ? drawerCloseStyles() : drawerOpenStyles()),
+
+      // Mobile styles
+      [breakpoints.down("sm")]: {
+        width: "100%",
+        maxWidth: "100%",
+        transform: miniSidenav ? "translateX(-100%)" : "translateX(0)",
+        transition: transitions.create(["transform", "width"], {
+          easing: transitions.easing.sharp,
+          duration: transitions.duration.shorter,
+        }),
+        "& .MuiBackdrop-root": {
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+        },
+      },
     },
   };
 });

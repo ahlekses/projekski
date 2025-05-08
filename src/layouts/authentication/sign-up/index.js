@@ -1,5 +1,3 @@
-
-
 import { useState } from "react";
 
 // react-router-dom components
@@ -33,7 +31,6 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 // Images
 import bgSignIn from "assets/images/signUpImage.png";
 
-
 import {useNavigate} from "react-router-dom"
 
 import api from "api";
@@ -43,36 +40,31 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from "constants";
 
 function SignIn() {
   const [rememberMe, setRememberMe] = useState(true);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const route = "/token/";
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [loading, setLoading] = useState(false)
-  const method = "login";  // or define it based on your needs
-  const route = "/token/";  // adjust to your actual API endpoint
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-    const handleSubmit = async (e) => {
-      setLoading(true);
-      e.preventDefault();
-
-
-      try {
-       
-        const res = await api.post(route, { username, password });
-
-
-        localStorage.setItem(ACCESS_TOKEN, res.data.access)
-        localStorage.setItem(REFRESH_TOKEN, res.data.refresh)
-       
-      } catch (error) {
-        alert(error)
-      }finally{
-        setLoading(false)
-      }
-      
+    try {
+      const res = await api.post(route, { username, password });
+      localStorage.setItem(ACCESS_TOKEN, res.data.access);
+      localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+      navigate('/dashboard'); // Redirect to dashboard after successful login
+    } catch (error) {
+      console.error('Login error:', error);
+      alert(error.response?.data?.detail || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
-    
+  };
+
   return (
     <CoverLayout
       title="Welcome!"
@@ -85,11 +77,11 @@ function SignIn() {
     >
       <GradientBorder borderRadius={borders.borderRadius.form} minWidth="100%" maxWidth="100%">
         <VuiBox
-        onSubmit={handleSubmit}
           component="form"
           role="form"
           borderRadius="inherit"
           p="45px"
+          onSubmit={handleSubmit}
           sx={({ palette: { secondary } }) => ({
             backgroundColor: secondary.focus,
           })}
@@ -103,13 +95,13 @@ function SignIn() {
               fontSize: size.lg,
             })}
           >
-            Register
+            Sign In
           </VuiTypography>
      
           <VuiBox mb={2}>
             <VuiBox mb={1} ml={0.5}>
               <VuiTypography component="label" variant="button" color="white" fontWeight="medium">
-                Name
+                Username
               </VuiTypography>
             </VuiBox>
             <GradientBorder
@@ -123,10 +115,12 @@ function SignIn() {
               )}
             >
               <VuiInput
-                placeholder="Your  username..."
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Your username..."
                 sx={({ typography: { size } }) => ({
                   fontSize: size.sm,
-
                 })}
               />
             </GradientBorder>
@@ -150,6 +144,8 @@ function SignIn() {
             >
               <VuiInput
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Your password..."
                 sx={({ typography: { size } }) => ({
                   fontSize: size.sm,
@@ -170,21 +166,21 @@ function SignIn() {
             </VuiTypography>
           </VuiBox>
           <VuiBox mt={4} mb={1}>
-            <VuiButton color="info" fullWidth>
-              SIGN UP
+            <VuiButton color="info" fullWidth type="submit" disabled={loading}>
+              {loading ? 'Signing in...' : 'SIGN IN'}
             </VuiButton>
           </VuiBox>
           <VuiBox mt={3} textAlign="center">
             <VuiTypography variant="button" color="text" fontWeight="regular">
-              Already have an account?{" "}
+              Don't have an account?{" "}
               <VuiTypography
                 component={Link}
-                to="/authentication/sign-in"
+                to="/authentication/sign-up"
                 variant="button"
                 color="white"
                 fontWeight="medium"
               >
-                Sign in
+                Sign up
               </VuiTypography>
             </VuiTypography>
           </VuiBox>

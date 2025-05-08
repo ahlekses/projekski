@@ -25,7 +25,7 @@ import { Card, LinearProgress, Stack } from "@mui/material";
 import VuiBox from "components/VuiBox";
 import VuiTypography from "components/VuiTypography";
 import VuiProgress from "components/VuiProgress";
-import FileUpload from "@mui/icons-material/FileUpload";
+
 
 // Vision UI Dashboard React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -40,10 +40,10 @@ import colors from "assets/theme/base/colors";
 
 // Dashboard layout components
 import WelcomeMark from "layouts/dashboard/components/WelcomeMark";
-import Projects from "layouts/dashboard/components/Projects";
+import Projects from "layouts/itdashboard/components/Projects";
 import OrderOverview from "layouts/dashboard/components/OrderOverview";
-import SatisfactionRate from "layouts/dashboard/components/SatisfactionRate";
-import ReferralTracking from "layouts/dashboard/components/ReferralTracking";
+import SatisfactionRate from "layouts/itdashboard/components/SatisfactionRate";
+import ReferralTracking from "layouts/itdashboard/components/ReferralTracking";
 
 // React icons
 import { IoIosRocket } from "react-icons/io";
@@ -60,9 +60,13 @@ import { lineChartDataDashboard } from "layouts/dashboard/data/lineChartData";
 import { lineChartOptionsDashboard } from "layouts/dashboard/data/lineChartOptions";
 import { barChartDataDashboard } from "layouts/dashboard/data/barChartData";
 import { barChartOptionsDashboard } from "layouts/dashboard/data/barChartOptions";
-import VuiButton from "components/VuiButton";
+import { PieChart } from "layouts/itdashboard/data/barChartOptions";
+import { MdWidthFull } from "react-icons/md";
+//import PieChart from "/components/";
 
-function itdashboard() {
+
+
+function ITDashboard() {
   const { gradients } = colors;
   const { cardContent } = gradients;
   console.log("barChartDataDashboard:", barChartDataDashboard);
@@ -73,9 +77,7 @@ function itdashboard() {
       <DashboardNavbar />
       
       <VuiBox py={3}>
-        <VuiBox mb={3}>
-        <VuiButton  variant="contained" color="info"><FileUpload/>&nbsp; Upload csv data for analytics</VuiButton>
-        </VuiBox>
+
         <VuiBox mb={3}>
           <Grid container spacing="18px">
             <Grid item xs={12} lg={12} xl={5}>
@@ -91,11 +93,11 @@ function itdashboard() {
         </VuiBox>
         <VuiBox mb={3}>
           <Grid container spacing={3}>
-            <Grid item xs={12} lg={6} xl={7}>
+            <Grid item xs={12} lg={6} xl={15}>
               <Card>
-                <VuiBox sx={{ height: "100%" }}>
+                <VuiBox sx={{ height: "100%", width: "100%" }}>
                   <VuiTypography variant="lg" color="white" fontWeight="bold" mb="5px">
-                    Job Satisfaction Rate
+                    Employee Training Rate
                   </VuiTypography>
                   <VuiBox display="flex" alignItems="center" mb="40px">
                     <VuiTypography variant="button" color="success" fontWeight="bold">
@@ -115,41 +117,7 @@ function itdashboard() {
               </Card>
             </Grid>
             <Grid item xs={12} lg={6} xl={5}>
-              <Card>
-                <VuiBox>
-                  <VuiBox
-                    mb="24px"
-                    height="220px"
-                    sx={{
-                      background: linearGradient(
-                        cardContent.main,
-                        cardContent.state,
-                        cardContent.deg
-                      ),
-                      borderRadius: "20px",
-                    }}
-                  >
-                    
-                    <BarChart
-                    
-                      barChartData={barChartDataDashboard}
-                      barChartOptions={barChartOptionsDashboard}
-                    />
-                  </VuiBox>
-                  <VuiTypography variant="lg" color="white" fontWeight="bold" mb="5px">
-                    Risk Rate Monitoring
-                  </VuiTypography>
-                  <VuiBox display="flex" alignItems="center" mb="40px">
-                    <VuiTypography variant="button" color="error" fontWeight="bold">
-                      (+23){" "}
-                      <VuiTypography variant="button" color="text" fontWeight="regular">
-                        than last week
-                      </VuiTypography>
-                    </VuiTypography>
-                  </VuiBox>
-                  
-                </VuiBox>
-              </Card>
+              
             </Grid>
           </Grid>
         </VuiBox>
@@ -167,4 +135,4 @@ function itdashboard() {
   );
 }
 /* <OrderOverview /> */
-export default itdashboard;
+export default ITDashboard;

@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // @mui material components
 import Card from "@mui/material/Card";
 
@@ -45,6 +45,11 @@ function accounts() {
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
+
+  const [records, setRecords] = useState([])
+
+  useEffect(()=>{
+    fetch('http://127.0.0.1:8000/api/users/').then(response=>response.json()).then(data => setRecords(data)).catch(err=>console.log(err))},[])
 
   const renderMenu = (
     <Menu

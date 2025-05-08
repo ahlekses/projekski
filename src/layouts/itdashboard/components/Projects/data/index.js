@@ -20,8 +20,8 @@ import avatar3 from "assets/images/avatar3.png";
 import avatar4 from "assets/images/avatar4.png";
 
 export default function data() {
-  const avatars = (participants) =>
-    participants.map(([image, name]) => (
+  const avatars = (uploadedby) =>
+    uploadedby.map(([image, name]) => (
       <Tooltip key={name} title={name} placeholder="bottom">
         <VuiAvatar
           src={image}
@@ -47,200 +47,84 @@ export default function data() {
 
   return {
     columns: [
-      { name: "intervention", align: "left" },
-      { name: "participants", align: "left" },
-      { name: "factor", align: "center" },
-      { name: "completion", align: "center" },
+      { name: "filename", align: "left" },
+      { name: "uploadedby", align: "center" },
+      { name: "uploaddate", align: "center" },
     ],
  /*<AdobeXD size="20px" />*/
     rows: [
       {
-        intervention: (
+        filename: (
           <VuiBox display="flex" alignItems="center">
            
             <VuiTypography pl="16px" color="white" variant="button" fontWeight="medium">
-              Seminars and Trainings
+              re_Onboardinganswers-2024.csv
             </VuiTypography>
           </VuiBox>
         ),
-        participants: (
+        uploadedby: (
           <VuiBox display="flex" py={1}>
             {avatars([
-              [avatar1, "Ryan Tompson"],
-              [avatar2, "Romina Hadid"],
-              [avatar3, "Alexander Smith"],
               [avatar4, "Jessica Doe"],
             ])}
           </VuiBox>
         ),
-        factor: (
+        uploaddate: (
           <VuiTypography variant="button" color="white" fontWeight="bold">
-            Career development
+           24/04/18
           </VuiTypography>
         ),
-        completion: (
-          <VuiBox width="8rem" textAlign="left">
-            <VuiTypography color="white" variant="button" fontWeight="bold">
-              60%
-            </VuiTypography>
-            <VuiProgress value={60} color="info" label={false} sx={{ background: "#2D2E5F" }} />
-          </VuiBox>
-        ),
+        
       },
       {
-        intervention: (
+        filename: (
           <VuiBox display="flex" alignItems="center">
             
             <VuiTypography pl="16px" color="white" variant="button" fontWeight="medium">
-            Salary and benefits
+           answers_Exitquestionnaire.csv
             </VuiTypography>
           </VuiBox>
         ),
-        participants: (
+        uploadedby: (
           <VuiBox display="flex" py={1}>
             {avatars([
               [avatar2, "Romina Hadid"],
-              [avatar4, "Jessica Doe"],
+             
             ])}
           </VuiBox>
         ),
-        factor: (
+        uploaddate: (
           <VuiTypography variant="button" color="white" fontWeight="bold">
-           Dissatisfaction
+          23/01/15
           </VuiTypography>
         ),
-        completion: (
-          <VuiBox width="8rem" textAlign="left">
-            <VuiTypography color="white" variant="button" fontWeight="bold">
-              10%
-            </VuiTypography>
-            <VuiProgress value={10} color="info" label={false} sx={{ background: "#2D2E5F" }} />
-          </VuiBox>
-        ),
+       
       },
       {
-        intervention: (
+        filename: (
           <VuiBox display="flex" alignItems="center">
            
             <VuiTypography pl="16px" color="white" variant="button" fontWeight="medium">
-            Reinforcement
+            onboardinganswers.csv
             </VuiTypography>
           </VuiBox>
         ),
-        participants: (
+        uploadedby: (
           <VuiBox display="flex" py={1}>
             {avatars([
               [avatar1, "Ryan Tompson"],
-              [avatar3, "Alexander Smith"],
+              
             ])}
           </VuiBox>
         ),
-        factor: (
+        uploaddate: (
           <VuiTypography variant="button" color="white" fontWeight="bold">
-           Disengagement
+           22/02/15
           </VuiTypography>
         ),
-        completion: (
-          <VuiBox width="8rem" textAlign="left">
-            <VuiTypography color="white" variant="button" fontWeight="bold">
-              100%
-            </VuiTypography>
-            <VuiProgress value={100} color="info" label={false} sx={{ background: "#2D2E5F" }} />
-          </VuiBox>
-        ),
+       
       },
-      {
-        intervention: (
-          <VuiBox display="flex" alignItems="center">
-            
-            <VuiTypography pl="16px" color="white" variant="button" fontWeight="medium">
-             Mandatory breaktime monitoring
-            </VuiTypography>
-          </VuiBox>
-        ),
-        participants: (
-          <VuiBox display="flex" py={1}>
-            {avatars([
-              [avatar4, "Jessica Doe"],
-              [avatar3, "Alexander Smith"],
-              [avatar2, "Romina Hadid"],
-              [avatar1, "Ryan Tompson"],
-            ])}
-          </VuiBox>
-        ),
-        factor: (
-          <VuiTypography variant="button" color="white" fontWeight="bold">
-           Work life balance
-          </VuiTypography>
-        ),
-        completion: (
-          <VuiBox width="8rem" textAlign="left">
-            <VuiTypography color="white" variant="button" fontWeight="bold">
-              100%
-            </VuiTypography>
-            <VuiProgress value={100} color="info" label={false} sx={{ background: "#2D2E5F" }} />
-          </VuiBox>
-        ),
-      },
-      {
-        intervention: (
-          <VuiBox display="flex" alignItems="center">
-            
-            <VuiTypography pl="16px" color="white" variant="button" fontWeight="medium">
-             Recognition program
-            </VuiTypography>
-          </VuiBox>
-        ),
-        participants: (
-          <VuiBox display="flex" py={1}>
-            {avatars([[avatar4, "Jessica Doe"]])}
-          </VuiBox>
-        ),
-        factor: (
-          <VuiTypography variant="button" color="white" fontWeight="bold">
-            Disengagement
-          </VuiTypography>
-        ),
-        completion: (
-          <VuiBox width="8rem" textAlign="left">
-            <VuiTypography color="white" variant="button" fontWeight="bold">
-              25%
-            </VuiTypography>
-            <VuiProgress value={25} color="info" label={false} sx={{ background: "#2D2E5F" }} />
-          </VuiBox>
-        ),
-      },
-      {
-        intervention: (
-          <VuiBox display="flex" alignItems="center">
-           
-            <VuiTypography pl="16px" color="white" variant="button" fontWeight="medium">
-              Department team building
-            </VuiTypography>
-          </VuiBox>
-        ),
-        participants: (
-          <VuiBox display="flex" py={1}>
-            {avatars([
-              [avatar1, "Ryan Tompson"],
-              [avatar4, "Jessica Doe"],
-            ])}
-          </VuiBox>
-        ),
-        factor: (
-          <VuiTypography variant="button" color="white" fontWeight="bold">
-           Disengagement
-          </VuiTypography>
-        ),
-        completion: (
-          <VuiBox width="8rem" textAlign="left">
-            <VuiTypography color="white" variant="button" fontWeight="bold">
-              40%
-            </VuiTypography>
-            <VuiProgress value={40} color="info" label={false} sx={{ background: "#2D2E5F" }} />
-          </VuiBox>
-        ),
-      },
+  
     ],
   };
 }
