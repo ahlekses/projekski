@@ -5,13 +5,11 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  TextField,
   MenuItem,
   FormControl,
-  InputLabel,
-  Select,
   Grid,
   IconButton,
+  Select,
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import VuiBox from "components/VuiBox";
@@ -39,7 +37,7 @@ const DynamicForm = ({
   // Reset form when opening/closing
   useEffect(() => {
     if (open) {
-      if ((mode === 'edit' || mode === 'delete') && data) {
+      if ((mode === 'edit' || mode === 'delete' || mode === 'view') && data) {
         console.log(`Setting ${mode} mode data:`, data);
         setFormData(data);
       } else {
@@ -70,17 +68,27 @@ const DynamicForm = ({
       setForeignKeys(fkData);
     };
 
-    loadForeignKeyData();
+    if (api && api.get) {
+      loadForeignKeyData();
+    }
   }, [fields, api]);
 
   const handleChange = (e) => {
-    if (mode === 'delete') return; // Prevent changes in delete mode
-    const { name, value } = e.target;
-    console.log(`Field ${name} changed to:`, value);
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    if (mode === 'delete') return;
+
+    const { name, type, files, value } = e.target;
+
+    if (type === 'file') {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: files[0] || null,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -88,63 +96,89 @@ const DynamicForm = ({
     setLoading(true);
     setError(null);
 
+    // 🔐 Prevent submitting in view mode
+    if (mode === 'view') {
+      onClose();
+      return;
+    }
+
     try {
       const submitData = { ...formData };
+
       if (mode === 'edit' || mode === 'delete') {
-        // Remove id and created_at from form data before submission
         delete submitData.id;
         delete submitData.created_at;
       }
-      
-      console.log(`${mode} department with data:`, submitData);
 
       let response;
-      try {
-        if (mode === 'create') {
-          response = await api.post(api.endpoint, submitData);
-        } else if (mode === 'edit') {
-          response = await api.put(api.endpoint, submitData);
-        } else if (mode === 'delete') {
-          response = await api.delete(`/departments/${data.id}/`);
-        }
-        console.log('API Response:', response);
-      } catch (apiError) {
-        console.error('API Error:', apiError);
-        console.error('API Error Response:', apiError.response);
-        throw apiError;
+      if (mode === 'create') {
+        response = await api.post(api.endpoint, submitData);
+      } else if (mode === 'edit') {
+        response = await api.put(api.endpoint, submitData);
+      } else if (mode === 'delete') {
+        response = await api.delete(api.endpoint);
       }
 
-      // Wait for the success callback to complete
-      if (onSuccess) {
-        await onSuccess();
-      }
-      
-      // Only close if successful
+      if (onSuccess) await onSuccess();
       onClose();
     } catch (err) {
-      console.error('Form Error:', err);
-      const errorMessage = err.response?.data?.detail || 
-                         err.response?.data?.message ||
-                         err.message || 
-                         'An error occurred';
+      const errorMessage = err.response?.data?.detail ||
+                            err.response?.data?.message ||
+                            err.message ||
+                            'An error occurred';
       setError(errorMessage);
-      // Keep the form open on error
       setLoading(false);
-      if (err.response?.status === 401) {
-        // Let the parent component handle the 401 error
-        if (onError) {
-          onError(err);
-        }
+      if (err.response?.status === 401 && onError) {
+        onError(err);
       }
-      return;
     }
-    
+
     setLoading(false);
+  };
+
+  // Modern gradient styles
+  const modernGradientStyle = {
+    background: 'linear-gradient(127.09deg, rgba(6, 11, 40, 0.94) 19.41%, rgba(10, 14, 35, 0.49) 76.65%)',
+    borderRadius: '10px',
+    border: 'none',
+    position: 'relative',
+    overflow: 'hidden',
+    padding: '1px',
+    '&:before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'linear-gradient(127.09deg, rgba(6, 11, 40, 0.94) 19.41%, rgba(10, 14, 35, 0.49) 76.65%)',
+      borderRadius: '10px',
+      zIndex: -1,
+    }
+  };
+
+  const modernInputStyle = {
+    color: 'white',
+    fontSize: { xs: '0.875rem', sm: '0.925rem', md: '1rem' }, // Responsive font size
+    padding: { xs: '8px 12px', sm: '10px 14px', md: '12px 16px' }, // Responsive padding
+    background: 'rgba(11, 20, 55, 0.5)',
+    border: '1px solid rgba(226, 232, 240, 0.3)',
+    borderRadius: '8px',
+    transition: 'all 0.2s ease-in-out',
+    backdropFilter: 'blur(4px)',
+    '&:focus': {
+      borderColor: '#0075FF',
+      boxShadow: '0 0 0 2px rgba(0, 117, 255, 0.2)',
+    },
+    '&.Mui-disabled': {
+      color: 'rgba(255, 255, 255, 0.5)',
+      WebkitTextFillColor: 'rgba(255, 255, 255, 0.5)',
+      opacity: 0.7,
+    }
   };
 
   const renderField = (field) => {
     const value = formData[field.name] ?? '';
-    console.log(`Rendering field ${field.name} with value:`, value);
     
     switch (field.type) {
       case 'text':
@@ -154,32 +188,29 @@ const DynamicForm = ({
         return (
           <VuiBox mb={2} key={field.name}>
             <VuiBox mb={1} ml={0.5}>
-              <VuiTypography component="label" variant="button" color="white" fontWeight="medium">
+              <VuiTypography 
+                component="label" 
+                variant="button" 
+                color="white" 
+                fontWeight="medium"
+                sx={{ 
+                  fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' } 
+                }}
+              >
                 {field.label}
               </VuiTypography>
             </VuiBox>
-            <GradientBorder>
-              <VuiInput
-                type={field.type}
-                name={field.name}
-                value={value}
-                onChange={handleChange}
-                placeholder={field.placeholder}
-                required={field.required}
-                fullWidth
-                disabled={mode === 'delete'}
-                sx={{
-                  color: 'white',
-                  '& .MuiInputBase-input': {
-                    color: 'white',
-                    '&.Mui-disabled': {
-                      color: 'rgba(255, 255, 255, 0.5)',
-                      WebkitTextFillColor: 'rgba(255, 255, 255, 0.5)',
-                    }
-                  }
-                }}
-              />
-            </GradientBorder>
+            <VuiInput
+              type={field.type}
+              name={field.name}
+              value={value}
+              onChange={handleChange}
+              placeholder={field.placeholder}
+              required={field.required}
+              fullWidth
+              disabled={mode === 'delete' || mode === 'view'}
+              sx={modernInputStyle}
+            />
           </VuiBox>
         );
 
@@ -187,37 +218,80 @@ const DynamicForm = ({
         return (
           <VuiBox mb={2} key={field.name}>
             <VuiBox mb={1} ml={0.5}>
-              <VuiTypography component="label" variant="button" color="white" fontWeight="medium">
+              <VuiTypography 
+                component="label" 
+                variant="button" 
+                color="white" 
+                fontWeight="medium"
+                sx={{ 
+                  fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' } 
+                }}  
+              >
                 {field.label}
               </VuiTypography>
             </VuiBox>
-            <GradientBorder>
-              <FormControl fullWidth>
-                <Select
-                  name={field.name}
-                  value={value}
-                  onChange={handleChange}
-                  required={field.required}
-                  disabled={mode === 'delete'}
-                  sx={{
+            <FormControl fullWidth>
+              <Select
+                name={field.name}
+                value={value}
+                onChange={handleChange}
+                required={field.required}
+                disabled={mode === 'delete' || mode === 'view'}
+                displayEmpty
+                sx={{
+                  ...modernInputStyle,
+                  color: 'white',
+                  '& .MuiSelect-select': {
                     color: 'white',
-                    '& .MuiSelect-icon': {
-                      color: 'white',
-                    },
-                    '&.Mui-disabled': {
-                      color: 'rgba(255, 255, 255, 0.5)',
-                      WebkitTextFillColor: 'rgba(255, 255, 255, 0.5)',
+                    fontSize: { xs: '0.875rem', sm: '0.925rem', md: '1rem' },
+                    padding: { xs: '8px 12px', sm: '10px 14px', md: '12px 16px' },
+                  },
+                  '& .MuiSelect-icon': {
+                    color: 'white',
+                  },
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    border: 'none'
+                  }
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      backgroundColor: 'rgba(17, 25, 42, 0.95)',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+                      '& .MuiMenuItem-root': {
+                        color: 'white',
+                        fontSize: { xs: '0.875rem', sm: '0.925rem', md: '1rem' },
+                        padding: '8px 16px',
+                        '&:hover': {
+                          backgroundColor: 'rgba(0, 117, 255, 0.1)',
+                        },
+                        '&.Mui-selected': {
+                          backgroundColor: 'rgba(0, 117, 255, 0.2)',
+                          '&:hover': {
+                            backgroundColor: 'rgba(0, 117, 255, 0.3)',
+                          }
+                        }
+                      }
                     }
-                  }}
-                >
-                  {foreignKeys[field.name]?.map(option => (
-                    <MenuItem key={option.id} value={option.id}>
-                      {option[field.foreignKey.displayField]}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </GradientBorder>
+                  }
+                }}
+              >
+                <MenuItem value="" disabled>
+                  Select {field.label}
+                </MenuItem>
+                {field.options && field.options.map(option => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+                {foreignKeys[field.name]?.map(option => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option[field.foreignKey.displayField]}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </VuiBox>
         );
 
@@ -225,6 +299,13 @@ const DynamicForm = ({
         return null;
     }
   };
+
+  const modeLabel = {
+    create: 'Create',
+    edit: 'Edit',
+    delete: 'Delete',
+    view: 'View',
+  }[mode] || '';
 
   return (
     <Dialog 
@@ -234,19 +315,23 @@ const DynamicForm = ({
       fullWidth
       PaperProps={{
         sx: {
-          backgroundColor: 'rgba(17, 25, 42, 0.94)',
+          backgroundColor: 'rgba(10, 16, 35, 0.97)',
           backgroundImage: 'none',
           borderRadius: '15px',
-          boxShadow: '0 0 2rem 0 rgba(0, 0, 0, 0.15)',
+          boxShadow: '0 10px 40px 0 rgba(0, 0, 0, 0.3)',
         },
       }}
     >
       <DialogTitle>
         <VuiBox display="flex" justifyContent="space-between" alignItems="center">
-          <VuiTypography variant="h5" color="white">
-            {mode === 'create' ? `Create New ${title}` : mode === 'edit' ? `Edit ${title}` : `Delete ${title}`}
+          <VuiTypography 
+            variant="h5" 
+            color="white"
+            sx={{ fontSize: { xs: '1.25rem', sm: '1.375rem', md: '1.5rem' } }}
+          >
+            {modeLabel} {title}
           </VuiTypography>
-          <IconButton onClick={onClose} color="inherit">
+          <IconButton onClick={onClose} sx={{ color: 'white' }}>
             <CloseIcon />
           </IconButton>
         </VuiBox>
@@ -269,11 +354,12 @@ const DynamicForm = ({
           )}
         </form>
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ padding: '16px 24px' }}>
         <Button 
           onClick={onClose} 
           sx={{ 
             color: 'white',
+            fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' },
             '&:hover': {
               backgroundColor: 'rgba(255, 255, 255, 0.1)',
             },
@@ -286,18 +372,36 @@ const DynamicForm = ({
           variant="contained"
           disabled={loading}
           sx={{
-            backgroundColor: mode === 'delete' ? '#dc3545' : '#0075FF',
+            backgroundColor:
+              mode === 'delete' ? '#dc3545' :
+              mode === 'view' ? '#6c757d' :
+              '#0075FF',
             color: 'white',
+            fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' },
+            padding: { xs: '6px 12px', sm: '8px 16px', md: '8px 20px' },
+            boxShadow: '0 4px 10px 0 rgba(0, 0, 0, 0.25)',
             '&:hover': {
-              backgroundColor: mode === 'delete' ? '#c82333' : '#0056b3',
+              backgroundColor:
+                mode === 'delete' ? '#c82333' :
+                mode === 'view' ? '#5a6268' :
+                '#0056b3',
+              boxShadow: '0 6px 15px 0 rgba(0, 0, 0, 0.35)',
             },
           }}
         >
-          {loading ? 'Processing...' : mode === 'create' ? 'Create' : mode === 'edit' ? 'Save Changes' : 'Delete'}
+          {loading
+            ? 'Processing...'
+            : mode === 'create'
+            ? 'Create'
+            : mode === 'edit'
+            ? 'Save Changes'
+            : mode === 'view'
+            ? 'Close'
+            : 'Delete'}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default DynamicForm; 
+export default DynamicForm;

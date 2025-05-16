@@ -16,6 +16,11 @@
 
 */
 import React, { useState, useEffect } from 'react';
+
+import Actionskie from 'components/Actionskie';
+import DynamicForm from 'components/DynamicForm';
+
+import { DataGrid } from '@mui/x-data-grid';
 import {
   Card,
   IconButton,
@@ -31,7 +36,6 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import Table from "examples/accounts/Table";
 import api from "api";
-import DynamicForm from "components/DynamicForm";
 import { ACCESS_TOKEN } from "constants";
 
 function Departments() {
@@ -42,12 +46,66 @@ function Departments() {
   const [formOpen, setFormOpen] = useState(false);
   const [formMode, setFormMode] = useState('create');
 
-  const columns = [
-    { name: "name", align: "left" },
-    { name: "description", align: "left" },
-    { name: "created_at", align: "left" },
-    { name: "actions", align: "center" },
+const handleEdit = (department) => {
+    setSelectedDepartment(department);
+    setFormMode('edit');
+    setFormOpen(true);
+  };
+
+  const handleDelete = (department) => {
+    setSelectedDepartment(department);
+    setFormMode('delete');
+    setFormOpen(true);
+  };
+
+  const handleView = (department) => {
+    setSelectedDepartment(department);
+    setFormMode('view');
+    setFormOpen(true);
+  };
+
+  const handleFormSuccess = async () => {
+    await fetchDepartments();
+    setFormOpen(false);
+    setSelectedDepartment(null);
+  };
+
+ const columns = [
+    { field: 'id', headerName: 'ID', width: 90 },
+     {
+      field: 'name',
+      headerName: 'Department Name',
+      width: 150,
+      editable: true,
+    },
+
+    {
+      field: 'description',
+      headerName: 'Department Description',
+      width: 150,
+      editable: true,
+    },
+    
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      type: 'actions',
+      renderCell: (params) => (
+        <Actionskie
+          onEdit={() => handleEdit(params.row)}
+          onDelete={() => handleDelete(params.row)}
+          onView={() => handleView(params.row)}
+        />
+      ),
+    },
   ];
+
+  const rows = departments.map((department) => ({
+    id: department.id,
+    name: department.name,
+     description: department.description,
+    
+  }));
 
   const departmentFields = [
     {
@@ -114,120 +172,13 @@ function Departments() {
     setAnchorEl(null);
   };
 
-  const handleFormSuccess = async () => {
-    try {
-      await fetchDepartments();
-      setFormOpen(false);
-      setSelectedDepartment(null);
-    } catch (error) {
-      console.error('Error refreshing departments:', error);
-    }
-  };
+  
 
-  const handleEdit = () => {
-    console.log('Handling edit with department:', selectedDepartment);
-    if (!selectedDepartment) return;
-    
-    setFormMode('edit');
-    setFormOpen(true);
-    handleMenuClose();
-  };
+   
 
-  const handleDelete = () => {
-    console.log('Handling delete with department:', selectedDepartment);
-    if (!selectedDepartment) return;
-    
-    setFormMode('delete');
-    setFormOpen(true);
-    handleMenuClose();
-  };
+  
 
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      open={Boolean(anchorEl)}
-      onClose={handleMenuClose}
-      anchorReference="anchorPosition"
-      anchorPosition={menuPosition}
-      sx={{
-        '& .MuiPaper-root': {
-          backgroundColor: 'rgba(17, 25, 42, 0.94)',
-          color: 'white',
-          minWidth: '120px',
-          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.5)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-        }
-      }}
-      MenuListProps={{
-        sx: {
-          py: 0.5,
-        }
-      }}
-    >
-      <MenuItem 
-        onClick={handleEdit}
-        sx={{
-          fontSize: '0.875rem',
-          py: 1,
-          px: 2,
-          '&:hover': {
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          }
-        }}
-      >
-        Edit
-      </MenuItem>
-      <MenuItem 
-        onClick={handleDelete}
-        sx={{
-          fontSize: '0.875rem',
-          py: 1,
-          px: 2,
-          color: '#dc3545',
-          '&:hover': {
-            backgroundColor: 'rgba(220, 53, 69, 0.1)',
-          }
-        }}
-      >
-        Delete
-      </MenuItem>
-    </Menu>
-  );
-
-  const rows = departments.map((department) => ({
-    id: department.id,
-    name: department.name,
-    description: department.description || '',
-    created_at: new Date(department.created_at).toLocaleDateString(),
-    actions: (
-      <IconButton
-        onClick={(e) => handleMenuOpen(e, {
-          id: department.id,
-          name: department.name,
-          description: department.description || ''
-        })}
-        size="small"
-        sx={{
-          width: 28,
-          height: 28,
-          borderRadius: '8px',
-          color: 'white',
-          transition: 'all 0.2s ease-in-out',
-          '&:hover': {
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            transform: 'scale(1.1)',
-          }
-        }}
-      >
-        <MoreVertIcon 
-          sx={{ 
-            color: 'white',
-            fontSize: '20px'
-          }} 
-        />
-      </IconButton>
-    ),
-  }));
+  
 
   return (
     <DashboardLayout>
@@ -258,13 +209,71 @@ function Departments() {
                 Create New
               </Button>
             </VuiBox>
-            <Table columns={columns} rows={rows} />
+             <VuiBox
+                         sx={{
+                           height: 400,
+                           width: '100%',
+                           '& .MuiDataGrid-root': {
+                             border: 'none',
+                             color: 'white',
+                           },
+                         }}
+                       >
+                         <DataGrid
+                           rows={rows}
+                           columns={columns}
+                           pageSize={5}
+                           rowsPerPageOptions={[5]}
+                           disableSelectionOnClick
+           
+                           sx={{
+                           
+                             '& .MuiDataGrid-columnHeaders': {
+                              borderBottom: '0.0625rem solid #2d3748',
+                             },
+                             '& .MuiDataGrid-columnHeaderTitle': {
+                               color: '#fff',
+                               fontWeight: 'bold',
+                             },
+                             '& .MuiDataGrid-cell': {
+                               color: '#a0aec0',
+                                 borderBottom: 'none',
+                             },
+                             '& .MuiDataGrid-cell.Mui-selected': {
+                               color: '#222',
+                               backgroundColor: '#222',
+                                 borderBottom: 'none',
+                             },
+                             '& .MuiDataGrid-cell:focus': {
+                               outline: '#222',
+                             },
+                             '& .MuiDataGrid-footerContainer': {
+                               
+                               color: '#fff',
+                                 borderTop: '0.0625rem solid #2d3748',
+                             },
+                             '& .MuiTablePagination-root': {
+                               color: '#fff',
+                             },
+                             '& .MuiInputBase-root': {
+                             
+                             },
+                             '& .MuiSvgIcon-root': {
+                               color: '#a0aec0',
+                             },
+                             '& .MuiTablePagination-selectIcon': {
+                               color: '#fff',
+                             },
+           
+                             
+                           }}
+                         />
+                       </VuiBox>
           </Card>
         </VuiBox>
       </VuiBox>
       <Footer />
       
-      {renderMenu}
 
       {formOpen && (
         <DynamicForm
@@ -322,14 +331,13 @@ function Departments() {
             }
           }}
           onSuccess={handleFormSuccess}
-          onError={(error) => {
-            console.error('Form Error:', error);
-            if (error.response?.status === 401) {
-              console.log('Unauthorized, redirecting to login...');
-              localStorage.removeItem(ACCESS_TOKEN);
-              window.location.href = '/sign-in';
-            }
-          }}
+                   onError={(error) => {
+                     console.error('Form Error:', error);
+                     if (error.response?.status === 401) {
+                       localStorage.removeItem(ACCESS_TOKEN);
+                       window.location.href = '/sign-in';
+                     }
+                   }}
         />
       )}
     </DashboardLayout>
